@@ -24,10 +24,12 @@ export default function App() {
 
   useEffect(() => {
     setState((prev) => {
-      if (prev.seeded) return prev
+      const needsSeed = !prev.seeded || !prev.posts?.length
+      if (!needsSeed && prev.demoUsers?.length) return prev
+      const mine = (prev.posts || []).filter((p) => prev.profile && p.userId === prev.profile.id)
       const next = {
         ...prev,
-        posts: DEMO_POSTS,
+        posts: [...DEMO_POSTS, ...mine],
         seeded: true,
         demoUsers: DEMO_USERS,
       }
